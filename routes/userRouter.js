@@ -1,8 +1,9 @@
 import express from 'express';
+import authMiddleware from '../middleware/auth.js';
 
 const userRouter = express.Router();
 
-
+userRouter.use(authMiddleware)
 //temporary route
 userRouter.post('/register',async (req,res)=>{  
     const {mess_id,email,password}=req.body;

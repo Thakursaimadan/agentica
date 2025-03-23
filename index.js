@@ -3,7 +3,7 @@ const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
-import userRouter from './routes/userRouter';
+import userRouter from './routes/userRouter.js';
 
 
 app.use(cors());
@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 app.use('users',userRouter)
-app.use('admin/',)
+//app.use('admin/',)
 
 
 
