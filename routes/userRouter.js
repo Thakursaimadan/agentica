@@ -1,6 +1,11 @@
 import express from 'express';
 import authMiddleware from '../middleware/auth.js';
+import Stripe from 'stripe';
+import pool from '../db.js';
+import dotenv from "dotenv";
+dotenv.config();
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const userRouter = express.Router();
 
 userRouter.use(authMiddleware)
@@ -74,11 +79,11 @@ userRouter.get('/orders/:orderId', async (req, res) => {
   });
 
 //route to submit mess change request
-userRouter.post('request-mess-change',async (req,res)=>{
+userRouter.post('/request-mess-change',async (req,res)=>{
     const userId = req.user.user_id;
     const userRes = await pool.query(`SELECT mess_id FROM users WHERE user_id = $1`, [userId]);
     const currentMessId = userRes.rows[0].mess_id;
-    const requestedMessId = 1;
+    let requestedMessId = 1;
     if(currentMessId===1)
     {
         requestedMessId=2;
@@ -114,7 +119,7 @@ userRouter.get('/menu-image',async (req,res)=>{
 })
 
 //to submit review
-userRouter.post('review',async(req,res)=>{  
+userRouter.post('/review',async(req,res)=>{  
     const userId = req.user.user_id;
     const { item_id, rating, comment } = req.body;
     await pool.query(
